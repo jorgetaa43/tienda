@@ -32,9 +32,10 @@
                 echo "TE HAS LOGEADO CON ÉXITO";
                 session_start();
                 $_SESSION["usuario"] = $usuario;
-                $rol = "SELECT rol FROM usuarios WHERE usuario = $usuario";
-                $_SESSION["rol"] = $rol;
-                header("location: productos.php");
+                $sql = "SELECT rol FROM usuarios WHERE usuario = '$usuario'";
+                $resultado = $conexion -> query($sql);
+                $_SESSION["rol"] = $resultado -> fetch_assoc()["rol"];
+                header("location: listado_productos.php");
             } else {
                 echo "CONTRASEÑA INCORRECTA";
             }

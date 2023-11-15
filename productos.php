@@ -10,105 +10,105 @@
 </head>
 <body>
     <?php 
-        $sql = "SELECT rol FROM usuarios";
-        $rol = $conexion -> query($sql);
-        if($rol == "admin") {
-            if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["registro"] == "Ver listado") {
-                header("location: listado_productos.php");
-            } else if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["registro"] == "Agregar") {
-                $temp_nombre = $_POST["nombre"];
-                $temp_precio = $_POST["precio"];
-                $temp_descripcion = $_POST["descripcion"];
-                $temp_cantidad = $_POST["cantidad"];
-                $temp_imagen = $_FILES["imagen"];
-                /* Insercción de imágenes */
-                $nombre_fichero = $_FILES["imagen"]["name"];
-                $ruta_temporal = $_FILES["imagen"]["tmp_name"];
-                $formato = $_FILES["imagen"]["type"];
-                $ruta_final = "imagenes/" . $nombre_fichero;
-                $tamano = $_FILES["imagen"]["size"];
+        session_start();
+        $rol = $_SESSION["rol"];
+        if($rol == "cliente") {
+           header("location: listado_productos.php");
+        }
+
+        if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["registro"] == "Ver listado") {
+            header("location: listado_productos.php");
+        } else if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["registro"] == "Agregar") {
+            $temp_nombre = $_POST["nombre"];
+            $temp_precio = $_POST["precio"];
+            $temp_descripcion = $_POST["descripcion"];
+            $temp_cantidad = $_POST["cantidad"];
+            $temp_imagen = $_FILES["imagen"];
+            /* Insercción de imágenes */
+            $nombre_fichero = $_FILES["imagen"]["name"];
+            $ruta_temporal = $_FILES["imagen"]["tmp_name"];
+            $formato = $_FILES["imagen"]["type"];
+            $ruta_final = "imagenes/" . $nombre_fichero;
+            $tamano = $_FILES["imagen"]["size"];
 
 
-                /* Validación nombre */
-                if(strlen($temp_nombre) == 0) {
-                    $error_nombre = "Este campo es obligatorio";
+            /* Validación nombre */
+            if(strlen($temp_nombre) == 0) {
+                $error_nombre = "Este campo es obligatorio";
+            } else {
+                $regex1 = "/^[A-Za-z0-9 ]*$/";
+                if(!preg_match($regex1, $temp_nombre)) {
+                    $error_nombre = "Error, el nombre solo puede contener letras, número y espacios en blanco";
                 } else {
-                    $regex1 = "/^[A-Za-z0-9 ]*$/";
-                    if(!preg_match($regex1, $temp_nombre)) {
-                        $error_nombre = "Error, el nombre solo puede contener letras, número y espacios en blanco";
+                    if(strlen($temp_nombre) > 40) {
+                        $error_nombre = "Error, el nombre debe tener menos de 41 carácteres.";
                     } else {
-                        if(strlen($temp_nombre) > 40) {
-                            $error_nombre = "Error, el nombre debe tener menos de 41 carácteres.";
-                        } else {
-                            $nombre = $temp_nombre;
-                        }
+                        $nombre = $temp_nombre;
                     }
                 }
+            }
 
-                /* Validación precio */
-                if(strlen($temp_precio) == 0) {
-                    $error_precio = "Este campo es obligatorio";
+            /* Validación precio */
+            if(strlen($temp_precio) == 0) {
+                $error_precio = "Este campo es obligatorio";
+            } else {
+                if(filter_var($temp_precio, FILTER_VALIDATE_FLOAT) === false) {
+                    $error_precio = "Debes introducir un número decimal.";
                 } else {
-                    if(filter_var($temp_precio, FILTER_VALIDATE_FLOAT) === false) {
-                        $error_precio = "Debes introducir un número decimal.";
+                    $temp_precio = (float) $temp_precio;
+                    if($temp_precio > 99999.99) {
+                        $error_precio = "Error, el precio debe ser menor de 100000.00";
                     } else {
-                        $temp_precio = (float) $temp_precio;
-                        if($temp_precio > 99999.99) {
-                            $error_precio = "Error, el precio debe ser menor de 100000.00";
+                        if($temp_precio < 0) {
+                            $error_precio = "Error, el precio debe ser mayor a 0.";
                         } else {
-                            if($temp_precio < 0) {
-                                $error_precio = "Error, el precio debe ser mayor a 0.";
-                            } else {
-                                $precio = $temp_precio;
-                            }
-                        }
-                    }
-                }
-
-                /* Validación descripción */
-                if(strlen($temp_descripcion) == 0) {
-                    $error_descripcion = "Este campo es obligatorio";
-                } else {
-                    if(strlen($temp_descripcion) > 255) {
-                        $error_descripcion = "Error, el nombre debe tener menos de 256 carácteres.";
-                    } else {
-                        $descripcion = $temp_descripcion;
-                    }
-                }
-
-                /* Validación cantidad */
-                if(strlen($temp_cantidad) == 0) {
-                    $error_cantidad = "Este campo es obligatorio";
-                } else {
-                    if(filter_var($temp_cantidad, FILTER_VALIDATE_INT) === false) {
-                        $error_cantidad = "Error, la cantidad debe ser un número entero.";
-                    } else {
-                        $temp_cantidad = (int) $temp_cantidad;
-                        if($temp_cantidad < 0 || $temp_cantidad > 99999) {
-                            $error_cantidad = "Error, la cantidad debe estar entre 0 y 1000000";
-                        } else {
-                            $cantidad = $temp_cantidad;
-                        }
-                    }
-                }
-
-                /* Validación imagen */
-                if(strlen($nombre_fichero) == 0) {
-                    $error_imagen = "Este campo es obligatorio";
-                } else {
-                    if($formato != "image/jpg" && $formato != "image/jpeg" && $formato != "image/png") {
-                        $error_imagen = "Error, el formato de la imagen no es válido.";
-                    } else {
-                        if($tamano > 5*1024*1024) {
-                            $error_imagen = "Error, el tamaño de la imagen no es válido.";
-                        } else {
-                            move_uploaded_file($ruta_temporal, $ruta_final);
+                            $precio = $temp_precio;
                         }
                     }
                 }
             }
-        } else {
-            header("location: listado_productos.php");
+
+            /* Validación descripción */
+            if(strlen($temp_descripcion) == 0) {
+                $error_descripcion = "Este campo es obligatorio";
+            } else {
+                if(strlen($temp_descripcion) > 255) {
+                    $error_descripcion = "Error, el nombre debe tener menos de 256 carácteres.";
+                } else {
+                    $descripcion = $temp_descripcion;
+                }
+            }
+
+            /* Validación cantidad */
+            if(strlen($temp_cantidad) == 0) {
+                $error_cantidad = "Este campo es obligatorio";
+            } else {
+                if(filter_var($temp_cantidad, FILTER_VALIDATE_INT) === false) {
+                    $error_cantidad = "Error, la cantidad debe ser un número entero.";
+                } else {
+                    $temp_cantidad = (int) $temp_cantidad;
+                    if($temp_cantidad < 0 || $temp_cantidad > 99999) {
+                        $error_cantidad = "Error, la cantidad debe estar entre 0 y 1000000";
+                    } else {
+                        $cantidad = $temp_cantidad;
+                    }
+                }
+            }
+
+            /* Validación imagen */
+            if(strlen($nombre_fichero) == 0) {
+                $error_imagen = "Este campo es obligatorio";
+            } else {
+                if($formato != "image/jpg" && $formato != "image/jpeg" && $formato != "image/png") {
+                    $error_imagen = "Error, el formato de la imagen no es válido.";
+                } else {
+                    if($tamano > 5*1024*1024) {
+                        $error_imagen = "Error, el tamaño de la imagen no es válido.";
+                    } else {
+                        move_uploaded_file($ruta_temporal, $ruta_final);
+                    }
+                }
+            }
         }
     ?>
 

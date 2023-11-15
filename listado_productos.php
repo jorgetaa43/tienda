@@ -17,6 +17,9 @@
 </head>
 <body>
     <?php
+        session_start();
+        $usuario = $_SESSION["usuario"];
+
         $sql = "SELECT * FROM productos";
         $resultado = $conexion -> query($sql);
         $productos = [];
@@ -27,14 +30,12 @@
             $descripcion = $fila["descripcion"];
             $cantidad = $fila["cantidad"];
             $imagen = $fila["imagen"];
-
+            
             $nuevo_producto = new Productos($idProducto,$nombre,$precio,$descripcion,$cantidad,$imagen);
             array_push($productos, $nuevo_producto);
         }
-
-        if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["registro"] == "Agregar") {
-            header("location: productos.php");
-        }
+        
+        
     ?>
 
 <div class="container">
@@ -48,6 +49,7 @@
                     <th>Descripción</th>
                     <th>Cantidad</th>
                     <th>Imagen</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -62,16 +64,38 @@
                     <td>
                         <img width="80px" height="80px" src="<?php echo $producto->imagen ?>">
                     </td>
+                    <td>
+                        <form action="" method="post">
+                            <input class="btn btn-warning" name="anadir" type="submit" value="Añadir a cesta">
+                            <input type="hidden" name="idProducto" value="<?php echo $producto->idProducto ?>">
+                        </form>
+                    </td>
                     <?php
                     echo "</tr>";
                 }
             ?>
             </tbody> 
         </table>
-        <form action="" method="post">
-        <input type="submit" class="btn btn-primary" id="boton" name="registro" value="Agregar">
-        </form>
-    </div>
+        <?php
+        if($_SERVER["REQUEST_METHOD"] == "POST") {
+            $idProducto = $_POST["idProducto"];
+
+            $sql = "SELECT id_cesta FROM cestas WHERE cestas_usuario = '$usuario'";
+            $resultado = $conexion -> query($sql);
+            while($fila = $resultado -> fetch_assoc()) {
+                $idCesta = $fila["id_cesta"];
+                echo "<p>$idCesta</p>";
+            }
+
+            $sql = "INSERT INTO productos_cestas(idProducto, idCesta, cantidad) Values('$idProducto', '$idCesta', 1)";
+            $conexion -> query($sql);
+        }
+        $rol = $_SESSION["rol"];
+        if($rol == "admin") {?>
+           <a href="productos.php"><button class="btn btn-primary" name="registro">Agregar</button></a> 
+        <?php
+        }?>
+</div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
