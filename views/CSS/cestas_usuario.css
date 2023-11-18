@@ -1,0 +1,48 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+  }
+  
+  caption {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  th,
+  td {
+    padding: 0.5rem;
+    text-align: center;
+    border: 1px solid #ccc;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  img {
+    max-width: 80px;
+    max-height: 80px;
+  }
+  
+  /* Estilos adicionales */
+  table {
+    background-color: #f9f9f9;
+  }
+  
+  th {
+    color: #333;
+  }
+  
+  td {
+    color: #555;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  tbody tr:hover {
+    background-color: #e6e6e6;
+  }
