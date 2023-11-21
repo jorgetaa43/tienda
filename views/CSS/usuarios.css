@@ -10,7 +10,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url("https://img.freepik.com/foto-gratis/registrarse-formulario-boton-concepto-grafico_53876-123684.jpg?w=826&t=st=1700243248~exp=1700243848~hmac=f5ab847614bce08e0929fa9308fe6d5ad9fa10b5971c10d6faeebcf58e49c7b1") no-repeat;
+    background: url("https://img.freepik.com/vector-premium/ingrese-nombre-usuario-contrasena-pagina-registro-pantalla-inicie-sesion-metafora-creativa-su-cuenta_566886-2868.jpg?w=1380") no-repeat;
     background-size: cover;
     background-position: center;  
 }
@@ -113,10 +113,4 @@ body {
     font-size: 1.2em;
     color: #162938;
     line-height: 57px;
-}
-
-.btn {
-    
-    background-color: #162938;
-    
 }

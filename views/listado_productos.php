@@ -58,33 +58,39 @@
             </thead>
             <tbody>
             <?php
-                foreach ($productos as $producto) {
-                    echo "<tr>";
-                    echo "<td>" . $producto->idProducto . "</td>";
-                    echo "<td>" . $producto->nombreProducto . "</td>";
-                    echo "<td>" . $producto->precio . "</td>";
-                    echo "<td>" . $producto->descripcion . "</td>";
-                    echo "<td>" . $producto->cantidad . "</td>";?>
-                    <td>
-                        <img width="80px" height="80px" src="<?php echo $producto->imagen ?>">
-                    </td>
-                    <td>
-                        <form action="" method="post">
-                            <select name="cantidad">
-                                <option value="cantidad">1</option>
-                                <option value="cantidad">2</option>
-                                <option value="cantidad">3</option>
-                                <option value="cantidad">4</option>
-                                <option value="cantidad">5</option>
-                            </select>
-                            <input class="btn btn-warning" name="anadir" type="submit" value="Añadir a cesta">
-                            <input type="hidden" name="idProducto" value="<?php echo $producto->idProducto ?>">
-                        </form>
-                    </td>    
-                    <?php
-                    echo "</tr>";
-                }
-            ?>
+            foreach ($productos as $producto) {
+                echo "<tr>";
+                echo "<td>" . $producto->idProducto . "</td>";
+                echo "<td>" . $producto->nombreProducto . "</td>";
+                echo "<td>" . $producto->precio . "</td>";
+                echo "<td>" . $producto->descripcion . "</td>";
+                echo "<td>" . $producto->cantidad . "</td>";?>
+                <td>
+                    <img width="80px" height="80px" src="<?php echo $producto->imagen ?>">
+                </td>
+                <td>
+                    <form action="" method="post">
+                        <?php
+                        $sql = "SELECT id_cesta FROM cestas WHERE cestas_usuario = '$usuario'";
+                        $resultado = $conexion -> query($sql);
+                        while($fila = $resultado -> fetch_assoc()) {
+                        ?>
+                        <select name="cantidad">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <?php
+                        }?>
+                        <input class="btn btn-warning" name="anadir" type="submit" value="Añadir a cesta">
+                        <input type="hidden" name="idProducto" value="<?php echo $producto->idProducto ?>">
+                    </form>
+                </td>
+                <?php
+                echo "</tr>";
+            }?>
             </tbody> 
         </table>
         <?php
@@ -98,7 +104,7 @@
                 echo "<p>$idCesta</p>";
             }
 
-            $sql = "INSERT INTO productos_cestas(idProducto, idCesta, cantidad) Values('$idProducto', '$idCesta', 1)";
+            $sql = "INSERT INTO productos_cestas(idProducto, idCesta, cantidad) Values('$idProducto', '$idCesta', '".$_POST["cantidad"]."')";
             $conexion -> query($sql);
         }
         $rol = $_SESSION["rol"];

@@ -24,31 +24,16 @@
             color: #fff;
             font-weight: 500;
         }
+
+        .btn:hover {
+            background-color: #0a1014;
+            color: #fff;
+            transition: 2s;
+        }
     </style>
 </head>
 <body>
-
-    <div class="wrapper">
-        <span class="icon-close"><ion-icon name="close"></ion-icon></span>
-        <div class="form-box login">
-            <h2>Login</h2>
-            <form action="#">
-                <div class="input-box">
-                    <span class="icon"><ion-icon name="person"></ion-icon></span>
-                    <input type="text" required>
-                    <label>Username</label>
-                </div>
-                <div class="input-box">
-                    <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
-                    <input type="password" required>
-                    <label>Password</label>
-                </div>
-                <button type="submit" class="btn">Login</button>
-            </form>
-        </div>
-    </div>
-
-    <?php
+<?php
         if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["registro"] == "Iniciar Sesión") {
             header("location: iniciar_sesion.php");
         } else if($_SERVER["REQUEST_METHOD"] == "POST" && $_POST["registro"] == "Registrarse") {
@@ -76,7 +61,7 @@
             if(strlen($temp_contrasena) == 0) {
                 $error_contrasena = "Este campo es obligatorio";
             } else {
-                $regex2 = "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/";
+                $regex2 = "/^[a-zA-Z0-9\W_]*$/";
                 if(!preg_match($regex2, $temp_contrasena)) {
                     $error_contrasena = "Error, la contraseña no cumple con los carácteres requiridos o aceptados.";
                 } else {
@@ -106,6 +91,31 @@
             }
         }
     ?>
+    <div class="wrapper">
+        <span class="icon-close"><ion-icon name="close"></ion-icon></span>
+        <div class="form-box login">
+            <h2>Login</h2>
+            <form action="#">
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="person"></ion-icon></span>
+                    <input type="text" required>
+                    <label>Usuario</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                    <input type="password" required>
+                    <label>Contraseña</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="calendar"></ion-icon></span>
+                    <input type="text" required>
+                    <label>Fecha de nacimiento</label>
+                </div>
+                <button type="submit" class="btn">Registrarse</button>
+            </form>
+        </div>
+    </div>
+
     <?php
         if (isset($usuario) && isset($contrasena_cifrada) && isset($fecha_nacimiento)) {
             echo "<h3>Usuario: " . $usuario . "</h3>";
