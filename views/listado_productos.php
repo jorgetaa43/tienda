@@ -101,10 +101,9 @@
             $resultado = $conexion -> query($sql);
             while($fila = $resultado -> fetch_assoc()) {
                 $idCesta = $fila["id_cesta"];
-                echo "<p>$idCesta</p>";
             }
 
-            $sql = "INSERT INTO productos_cestas(idProducto, idCesta, cantidad) Values('$idProducto', '$idCesta', '".$_POST["cantidad"]."')";
+            $sql = "INSERT INTO productos_cestas(idProducto, idCesta, cantidad) VALUES('$idProducto', '$idCesta', '".$_POST["cantidad"]."')";
             $conexion -> query($sql);
         }
         $rol = $_SESSION["rol"];

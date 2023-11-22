@@ -43,8 +43,8 @@
     }
     ?>
 
-    <div class="container mt-3">
-        <h1>Iniciar Sesión</h1>
+    <div class="container mb-3">
+        <h2>Sign in</h2>
         <form action="" method="post">
             <div class="mb-3">
                 <label for="" class="form-label">Usuario: </label>

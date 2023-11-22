@@ -50,7 +50,7 @@
     
     <?php
     if(isset($_POST["confirmarCompra"]) && $_POST["confirmarCompra"] == "Finalizar compra") {
-        $sql = "INSERT INTO pedidos VALUES(null, '$usuario', '$totalCompra', null)";
+        $sql = "INSERT INTO pedidos(id_pedido, usuario, precioTotal, fecha) VALUES(null, '$usuario', '$totalCompra', '".date('Y-m-d')."')";
         $conexion -> query($sql);
 
         $sql = "SELECT id_cesta FROM cestas WHERE cestas_usuario = '$usuario'";
@@ -67,11 +67,18 @@
             while ($filaa = $resultadoo->fetch_assoc()){
                 $sql = "SELECT id_pedido FROM pedidos WHERE usuario = '$usuario';";
                 $id_pedido = $conexion->query($sql)->fetch_assoc()["id_pedido"];
-                $sql = "INSERT INTO linea_pedidos VALUES($contador,'".$fila["idProducto"]."','$id_pedido','".$filaa["precio"]."','".$fila["cantidad"]."');";
+                $sql = "INSERT INTO linea_pedidos(linea_pedidos, idProducto, idPedido, precioUnitario, cantidad) VALUES($contador,'".$fila["idProducto"]."','$id_pedido','".$filaa["precio"]."','".$fila["cantidad"]."');";
                 $contador = $contador+1;
                 $conexion->query($sql);
             }
         }
+        $sql = "SELECT idCesta FROM productos_cestas";
+        $resultado = $conexion->query($sql);
+        $id_cesta = $resultado->fetch_assoc()["idCesta"];
+        $sql = "DELETE FROM productos_cestas WHERE idCesta = $idCesta";
+        $conexion->query($sql);
+        $sql = "DELETE FROM cestas WHERE id_cesta = $id_cesta";
+        $conexion->query($sql);
     }
     ?>
         <form action="" method="post">

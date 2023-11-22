@@ -114,3 +114,13 @@ body {
     color: #162938;
     line-height: 57px;
 }
+
+#btn2 {
+    margin-top: 5px;
+    margin-bottom: 15px;
+} 
+
+.titulo {
+    margin-bottom: -15px;
+    margin-top: 10px;
+}
